@@ -22,5 +22,15 @@ Card lists can be found at the following 2 images:
 
 If there are no legal moves left in the game, check number of tokens held by each player. Highest banner token player wins.
 
+## Why
+
+This is a learning experiment for Monte Carlo Tree Search. I picked this game because:
+
+1. It is a perfect information game
+2. Lookahead is a crucial part of the gameplay
+3. A reduced set of the game (no companion cards) is easily understandable
+
+I am using <https://jeffbradberry.com/posts/2015/09/intro-to-monte-carlo-tree-search/> as a base reference for the MCTS and the data structure implementation.
+
 
 [rules]: https://images-cdn.fantasyflightgames.com/filer_public/07/d3/07d30fde-83cf-4de7-abde-3c3a08eacd02/handoftheking_rules_eng.pdf
