@@ -1,0 +1,5 @@
+# Don't ask why
+*.php
+*.log
+.cache
+*.pyc
