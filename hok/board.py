@@ -41,7 +41,7 @@ class Board(object):
             "players": self.TOTAL_PLAYERS,
             "current_player": 0,
             "scores": [0] * self.TOTAL_PLAYERS,
-            "cards": ([[]] * self.TOTAL_PLAYERS)
+            "cards": [[] for i in range(self.TOTAL_PLAYERS)]
         }
 
     def scores(self, cards):
@@ -133,11 +133,10 @@ class Board(object):
         state['scores'] = self.scores(state['cards'])
 
         # Fix the next player
-        if current > self.TOTAL_PLAYERS:
-            state['current_player'] = 0
-        else:
-            state['current_player'] = current + 1
+        current = state['current_player'] = current + 1
 
+        if current >= self.TOTAL_PLAYERS:
+            state['current_player'] = 0
         return state
 
     def find_varys(self, state):

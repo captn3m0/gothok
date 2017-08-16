@@ -61,19 +61,35 @@ class TestHandOfKing(object):
         assert(expected_scores == basic_board.scores(cards))
 
     def test_move(self, basic_board):
+        # We make 5 moves: left right, up down, left
         start = self.make_board_state("\
--B----\
+---B--\
 TV-L--\
 ------\
--S----\
--S----\
+---S--\
+U--S--\
 ------")
-        left = basic_board.next_state(start, (1, 0))
-        assert(left['board'][1][0] == Board.VARYS)
-        assert(left['board'][1][1] == Board.EMPTY)
-        assert(left['cards'][0] == [Board.TARGARYEN])
+        basic_board.next_state(start, (1, 0))
+        assert(start['board'][1][0] == Board.VARYS)
+        assert(start['board'][1][1] == Board.EMPTY)
+        assert(start['cards'][0] == [Board.TARGARYEN])
 
-        right = basic_board.next_state(start, (1, 3))
-        assert(right['board'][1][3] == Board.VARYS)
-        assert(right['board'][1][1] == Board.EMPTY)
-        assert(right['cards'][0] == [Board.LANNISTER])
+        basic_board.next_state(start, (1, 3))
+        assert(start['board'][1][3] == Board.VARYS)
+        assert(start['board'][1][1] == Board.EMPTY)
+        assert(start['cards'][1] == [Board.LANNISTER])
+
+        basic_board.next_state(start, (0, 3))
+        assert(start['board'][1][3] == Board.EMPTY)
+        assert(start['board'][0][3] == Board.VARYS)
+        assert(start['cards'][2] == [Board.BARATHEON])
+
+        basic_board.next_state(start, (4, 3))
+        assert(start['board'][0][3] == Board.EMPTY)
+        assert(start['board'][4][3] == Board.VARYS)
+        assert(start['cards'][3] == [Board.STARK, Board.STARK])
+
+        basic_board.next_state(start, (4, 0))
+        assert(start['board'][4][3] == Board.EMPTY)
+        assert(start['board'][4][0] == Board.VARYS)
+        assert(start['cards'][0] == [Board.TARGARYEN, Board.TULLY])
