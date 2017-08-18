@@ -1,4 +1,5 @@
 import random
+import json
 
 '''
 Class for holding the entire
@@ -7,6 +8,8 @@ Kings Landing
 
 
 class Board(object):
+    num_players = 4
+
     TOTAL_PLAYERS = 4
     GRID_SIZE = 6
     '''
@@ -22,7 +25,19 @@ class Board(object):
     VARYS = 1
     EMPTY = 0
 
-    def start(self):
+    def unpack_state(self, state):
+        return state
+
+    def pack_action(self, play):
+        return json.dumps(play)
+
+    def unpack_action(self, play):
+        return json.loads(play)
+
+    def pack_state(self, state):
+        return state
+
+    def starting_state(self):
         '''
         Total 36 cards
         '''
@@ -39,7 +54,7 @@ class Board(object):
             "board": [l[i:i+self.GRID_SIZE]
                       for i in range(0, len(l), self.GRID_SIZE)],
             "players": self.TOTAL_PLAYERS,
-            "current_player": 0,
+            "player": 1,
             "scores": [0] * self.TOTAL_PLAYERS,
             "cards": [[] for i in range(self.TOTAL_PLAYERS)]
         }
@@ -64,14 +79,13 @@ class Board(object):
                 scores[player_index] += 1
         return scores
 
-    def display_state(self, state):
-        print()
+    def display(self, state, action, _unicode=True):
+        ret = "\n"
         lookup = ['-', 'V', 'U', 'Y', 'B', 'T', 'L', 'G', 'S']
         for row in state['board']:
-            print("".join([lookup[card] for card in row]))
+            ret += "".join([lookup[card] for card in row]) + "\n"
 
-    def current_player(self, state):
-        return state['current_player']
+        return (ret)
 
     # Takes the game state, and the move to be applied.
     # Returns the new game state.
@@ -79,7 +93,7 @@ class Board(object):
     def next_state(self, state, move):
         x = move[0]
         y = move[1]
-        current = state['current_player']
+        current = state['player'] - 1
 
         # Check move is on the square board
         assert(0 <= x < self.GRID_SIZE)
@@ -133,10 +147,13 @@ class Board(object):
         state['scores'] = self.scores(state['cards'])
 
         # Fix the next player
-        current = state['current_player'] = current + 1
-
+        # Current always holds the index
+        current = current + 1
         if current >= self.TOTAL_PLAYERS:
-            state['current_player'] = 0
+            current = 0
+
+        state['player'] = current + 1
+
         return state
 
     def find_varys(self, state):
@@ -146,6 +163,11 @@ class Board(object):
                     return (row_index, column)
 
         raise Exception("Invalid state, no Varys in game")
+
+    def is_legal(self, history, action):
+        state = history[-1]
+        plays = self.legal_plays([state])
+        return(action in state)
 
     # Takes a sequence of game states representing the full
     # game history, and returns the full list of moves that

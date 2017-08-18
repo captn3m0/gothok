@@ -19,7 +19,7 @@ class TestHandOfKing(object):
         lookup = ['-', 'V', 'U', 'Y', 'B', 'T', 'L', 'G', 'S']
         # Slice in 6 rows
         # And convert strings to numbers
-        state = Board().start()
+        state = Board().starting_state()
         board = [
             [lookup.index(card) for card in board_str[i:i+Board.GRID_SIZE]]
             for i in range(0, len(board_str), Board.GRID_SIZE)]
@@ -42,7 +42,7 @@ class TestHandOfKing(object):
         assert(board[2][4] == Board.VARYS)
 
     def test_init(self, basic_board):
-        basic_board.start()
+        basic_board.starting_state()
         assert(basic_board.__class__ == Board)
 
     def test_scoring(self, basic_board):
@@ -60,7 +60,7 @@ class TestHandOfKing(object):
         expected_scores = [1, 1, 1, 2]
         assert(expected_scores == basic_board.scores(cards))
 
-    def test_legaly_plays(self, basic_board):
+    def test_legal_plays(self, basic_board):
         # We make 5 moves: left right, up down, left
         start = self.make_board_state("\
 ---B--\
@@ -85,7 +85,7 @@ U-----\
         assert(len(plays) == 6)
 
     def test_winner(self, basic_board):
-        state = Board().start()
+        state = Board().starting_state()
         state['cards'] = [
             [Board.STARK, Board.STARK],
             [Board.TULLY],
