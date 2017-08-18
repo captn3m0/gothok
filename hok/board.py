@@ -155,13 +155,54 @@ class Board(object):
         # to check for valid moves
         current_state = state_history[len(state_history) - 1]
         varys = self.find_varys(current_state)
+
+        x = varys[0]
+        y = varys[1]
+
+        # Constant X = same row
+        # Constant Y =  same column
+        # These are all sorted lists starting from the card next
+        # to varys and going to the edge of the board
+        ranges = [
+            list(reversed([(x, col) for col in range(0, x+1)])),   # Left
+            [(x, col) for col in range(x+2, 6)],                   # Right
+            list(reversed([(row, y) for row in range(0, y-1)])),   # Up
+            [(row, y) for row in range(y, 6)]                      # Down
+        ]
+
+        ranges = [
+            [
+                (pos[0], pos[1])
+                for pos in rrange
+                # Remove any empty cards on the way
+                if current_state['board'][pos[0]][pos[1]] != self.EMPTY
+            ]
+            for rrange
+            # Remove some directions if we are the edge
+            in ranges if len(rrange) > 0]
+
         # For this, since the total number of possible moves
         # is just 10, we enumerate them all and then assign
         # them to a "direction,house bucket". This ensures
         # that only card from each house is picked for a specific
         # direction (and the furthest card at that)
 
-        pass
+        final_ranges = [
+            [[] for ii in range(self.TULLY, self.STARK+3)]
+            for i in range(0, 4)]
+
+        for index, rrange in enumerate(ranges):
+            for pos in rrange:
+                x = pos[0]
+                y = pos[1]
+                card = current_state['board'][x][y]
+                final_ranges[index][card] = pos
+
+        flatten = lambda l: [
+            item for sublist in l
+            for item in sublist if len(item) > 0]
+
+        return(flatten(final_ranges))
 
     def winner(self, state_history):
         # Takes a sequence of game states representing the full

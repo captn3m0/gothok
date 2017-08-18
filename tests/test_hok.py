@@ -60,6 +60,30 @@ class TestHandOfKing(object):
         expected_scores = [1, 1, 1, 2]
         assert(expected_scores == basic_board.scores(cards))
 
+    def test_legaly_plays(self, basic_board):
+        # We make 5 moves: left right, up down, left
+        start = self.make_board_state("\
+---B--\
+T--L--\
+SSLVTT\
+---S--\
+U-----\
+---S--")
+
+        plays = basic_board.legal_plays([start])
+        assert((2, 0) in plays)  # Leftmost STARK
+        assert((2, 2) in plays)  # Leftmost LANNISTER
+        assert((2, 5) in plays)  # Rightmost TARG
+        assert((0, 3) in plays)  # Topmost BARATHEON
+        assert((1, 3) in plays)  # Topmost LANNISTER
+        assert((5, 3) in plays)  # Bottom STARK
+
+        assert((2, 1) not in plays)  # Left middle STARK
+        assert((2, 4) not in plays)  # Right middle TARG
+        assert((3, 3) not in plays)  # Bottom Middle STARK
+
+        assert(len(plays) == 6)
+
     def test_move(self, basic_board):
         # We make 5 moves: left right, up down, left
         start = self.make_board_state("\
