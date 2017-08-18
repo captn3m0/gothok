@@ -204,9 +204,22 @@ class Board(object):
 
         return(flatten(final_ranges))
 
+    # Takes a sequence of game states representing the full
+    # game history.  If the game is now won, return the player
+    # number.  If the game is still ongoing, return zero.  If
+    # the game is tied, return a different distinct value, e.g. -1.
     def winner(self, state_history):
-        # Takes a sequence of game states representing the full
-        # game history.  If the game is now won, return the player
-        # number.  If the game is still ongoing, return zero.  If
-        # the game is tied, return a different distinct value, e.g. -1.
-        pass
+        current_state = state_history[len(state_history) - 1]
+        # Player has a move left
+        if len(self.legal_plays(state_history)) > 0:
+            return 0
+
+        cards = current_state['cards']
+        scores = self.scores(cards)
+        highest = max(scores)
+
+        # We have a tie
+        if scores.count(highest) == 1:
+            return scores.index(max(scores))
+        else:
+            return -1

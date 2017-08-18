@@ -84,6 +84,19 @@ U-----\
 
         assert(len(plays) == 6)
 
+    def test_winner(self, basic_board):
+        state = Board().start()
+        state['cards'] = [
+            [Board.STARK, Board.STARK],
+            [Board.TULLY],
+            [],
+            [Board.TARGARYEN]
+        ]
+
+        winner = basic_board.winner([state])
+
+        assert(winner == 0)
+
     def test_move(self, basic_board):
         # We make 5 moves: left right, up down, left
         start = self.make_board_state("\
