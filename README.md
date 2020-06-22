@@ -4,8 +4,8 @@ See [rules][rules]. This is a very toned down version of the game, without the c
 
 Card lists can be found at the following 2 images:
 
-- [Characters](https://boardgamegeek.com/image/3687891/game-thrones-hand-king?size=original)
-- [Companions](https://cf.geekdo-images.com/images/pic3253090.jpg)
+- [Characters](https://boardgamegeek.com/image/3687891/game-thrones-hand-king)
+- [Companions](https://boardgamegeek.com/image/3253090/game-thrones-hand-king)
 
 ## Setup:
 
